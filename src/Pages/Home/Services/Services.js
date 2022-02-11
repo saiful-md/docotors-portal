@@ -1,29 +1,26 @@
 import React from "react";
-import { experimentalStyled as styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import services from "../../../fakeDbj";
+import SingleService from "../SingleService/SingleService";
 
 const Services = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginTop: "100px" }}>
       <Container>
+        <Box sx={{ lineHeight: "0.5", marginBottom: "50px" }}>
+          <h3 style={{ color: "cyan" }}>Our Service</h3>
+          <h1>Services we provide</h1>
+        </Box>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}>
-          {Array.from(Array(6)).map((_, index) => (
-            <Grid item xs={4} sm={4} md={4} key={index}>
-              <Item>xs=2</Item>
-            </Grid>
+          {services.map((service) => (
+            <SingleService
+              key={service.title}
+              service={service}></SingleService>
           ))}
         </Grid>
       </Container>
