@@ -1,39 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 // import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
+import BookingModal from "../BookingModa/BookingModal";
 
 const SingleAvailableComponent = ({ appointment }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
   const { title, time, avalable } = appointment;
   return (
-    <Grid item xs={4} sm={4} md={4}>
-      <Card sx={{ padding: "20px 0px" }}>
-        <CardContent>
-          <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
-            {title}
-          </Typography>
-          <Typography variant='h5' component='div'>
-            {time}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-            {avalable}
-          </Typography>
-          <Typography variant='body2'>
-            <Button
-              sx={{ textDecoration: "uppercase", fontWeight: 600 }}
-              variant='contained'>
-              Book Appointment
-            </Button>
-          </Typography>
-        </CardContent>
-        {/* <CardActions sx={{ textAlign: "center" }}>
+    <>
+      <Grid item xs={4} sm={4} md={4}>
+        <Card sx={{ padding: "20px 0px" }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color='text.secondary'
+              gutterBottom>
+              {title}
+            </Typography>
+            <Typography variant='h5' component='div'>
+              {time}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+              {avalable}
+            </Typography>
+            <Typography variant='body2'>
+              <Button
+                sx={{ textDecoration: "uppercase", fontWeight: 600 }}
+                variant='contained'
+                onClick={handleOpen}>
+                Book Appointment
+              </Button>
+            </Typography>
+          </CardContent>
+          {/* <CardActions sx={{ textAlign: "center" }}>
           
         </CardActions> */}
-      </Card>
-      {/* <Box
+        </Card>
+        {/* <Box
         sx={{
           border: 1,
           borderColor: "grey",
@@ -51,7 +59,9 @@ const SingleAvailableComponent = ({ appointment }) => {
         <h1>{time}</h1>
         <h1>{avalable}</h1>
       </Box> */}
-    </Grid>
+      </Grid>
+      {open && <BookingModal open={open} setOpen={setOpen}></BookingModal>}
+    </>
   );
 };
 
