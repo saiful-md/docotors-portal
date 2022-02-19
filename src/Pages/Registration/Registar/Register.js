@@ -60,7 +60,7 @@ const Register = () => {
                   <TextField
                     required
                     onChange={(e) => setEmail(e.target.value)}
-                    type='text'
+                    type='email'
                     sx={{ width: "300px" }}
                     id='standard-basic'
                     label='Email'
@@ -116,7 +116,7 @@ const Register = () => {
                     onClick={handleLogin}
                     sx={{ width: "50%" }}
                     variant='contained'>
-                    Sign In
+                    Register
                   </Button>
                 </CardActions>
               </Card>

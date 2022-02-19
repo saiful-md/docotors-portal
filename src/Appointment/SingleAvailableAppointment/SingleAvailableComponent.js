@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 import BookingModal from "../BookingModa/BookingModal";
 
-const SingleAvailableComponent = ({ appointment }) => {
+const SingleAvailableComponent = ({ appointment, date }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const { title, time, avalable } = appointment;
@@ -37,30 +37,15 @@ const SingleAvailableComponent = ({ appointment }) => {
               </Button>
             </Typography>
           </CardContent>
-          {/* <CardActions sx={{ textAlign: "center" }}>
-          
-        </CardActions> */}
         </Card>
-        {/* <Box
-        sx={{
-          border: 1,
-          borderColor: "grey",
-          boxShadow: 3,
-
-          bgcolor: (theme) =>
-            theme.palette.mode === "dark" ? "#101010" : "#fff",
-          color: (theme) =>
-            theme.palette.mode === "dark" ? "grey.300" : "grey.800",
-          p: 1,
-          m: 1,
-          borderRadius: 2,
-        }}>
-        <h1>{title}</h1>
-        <h1>{time}</h1>
-        <h1>{avalable}</h1>
-      </Box> */}
       </Grid>
-      {open && <BookingModal open={open} setOpen={setOpen}></BookingModal>}
+      {open && (
+        <BookingModal
+          appointment={appointment}
+          open={open}
+          setOpen={setOpen}
+          date={date}></BookingModal>
+      )}
     </>
   );
 };

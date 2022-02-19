@@ -53,6 +53,7 @@ const AvaiablbeAppointments = ({ date }) => {
           columns={{ xs: 4, sm: 8, md: 12 }}>
           {avalableComponents.map((appoionment) => (
             <SingleAvailableComponent
+              date={date}
               key={appoionment.id}
               appointment={appoionment}></SingleAvailableComponent>
           ))}
