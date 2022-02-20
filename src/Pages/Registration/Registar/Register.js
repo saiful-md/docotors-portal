@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useAuth from "../../../Hooks/useAuth";
 import TextField from "@mui/material/TextField";
 import { Box } from "@mui/system";
 // import CircularProgress from '@mui/material/CircularProgress';
@@ -10,6 +11,7 @@ import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  const { registerUser } = useAuth();
   const [name, setName] = useState({});
   const [email, setEmail] = useState({});
   const [phone, setPhone] = useState({});
@@ -20,7 +22,7 @@ const Register = () => {
   const handleLogin = () => {
     if (password === rePassword) {
       setPasswordErro(false);
-      console.log({ name, email, phone, password, rePassword });
+      registerUser(email, password);
     } else {
       setPasswordErro(true);
     }
