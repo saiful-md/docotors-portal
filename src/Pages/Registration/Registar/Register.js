@@ -4,14 +4,20 @@ import TextField from "@mui/material/TextField";
 import { Box } from "@mui/system";
 // import CircularProgress from '@mui/material/CircularProgress';
 
-import { Button, CardActions, CardContent, Grid } from "@mui/material";
+import {
+  Button,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import image from "../../../images/login.png";
 import Card from "@mui/material/Card";
 import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 
 const Register = () => {
-  const { registerUser } = useAuth();
+  const { registerUser, isLoading } = useAuth();
   const [name, setName] = useState({});
   const [email, setEmail] = useState({});
   const [phone, setPhone] = useState({});
@@ -45,84 +51,91 @@ const Register = () => {
             xs={12}
             sm={6}
             md={6}>
-            <Grid>
-              <Card sx={{ minWidth: 275, padding: "20px" }}>
-                <CardContent sx={{ width: "300px" }}>
-                  <h3>Login</h3>
-                  <TextField
-                    required
-                    onChange={(e) => setName(e.target.value)}
-                    type='text'
-                    sx={{ width: "300px" }}
-                    id='standard-basic'
-                    label='Name'
-                    variant='standard'
-                  />{" "}
-                  <br />
-                  <TextField
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
-                    type='email'
-                    sx={{ width: "300px" }}
-                    id='standard-basic'
-                    label='Email'
-                    variant='standard'
-                  />{" "}
-                  <br />
-                  <TextField
-                    required
-                    onChange={(e) => setPhone(e.target.value)}
-                    type='tel'
-                    sx={{ width: "300px" }}
-                    id='standard-basic'
-                    label='Phone Number'
-                    variant='standard'
-                  />{" "}
-                  <br />
-                  <TextField
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                    type='password'
-                    sx={{ width: "300px" }}
-                    id='standard-basic'
-                    label='Password'
-                    variant='standard'
-                  />
-                  <TextField
-                    required
-                    onChange={(e) => setRePassword(e.target.value)}
-                    type='password'
-                    sx={{ width: "300px" }}
-                    id='standard-basic'
-                    label='Re - Type Password'
-                    variant='standard'
-                  />
-                  <br />
-                  {passwordError && (
-                    <Alert severity='error'>
-                      This is an error alert — check it out!
-                    </Alert>
-                  )}
-                  <h4>
-                    If you Already have an Account Please <br /> Go to Login!
-                    <Link to='/login'>Here</Link>
-                  </h4>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    textAlign: "center",
-                    display: "block",
-                    // marginTop: "20px",
-                  }}>
-                  <Button
-                    onClick={handleLogin}
-                    sx={{ width: "50%" }}
-                    variant='contained'>
-                    Register
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+            {!isLoading && (
+              <Grid>
+                <Card sx={{ minWidth: 275, padding: "20px" }}>
+                  <CardContent sx={{ width: "300px" }}>
+                    <h3>Login</h3>
+                    <TextField
+                      required
+                      onChange={(e) => setName(e.target.value)}
+                      type='text'
+                      sx={{ width: "300px" }}
+                      id='standard-basic'
+                      label='Name'
+                      variant='standard'
+                    />{" "}
+                    <br />
+                    <TextField
+                      required
+                      onChange={(e) => setEmail(e.target.value)}
+                      type='email'
+                      sx={{ width: "300px" }}
+                      id='standard-basic'
+                      label='Email'
+                      variant='standard'
+                    />{" "}
+                    <br />
+                    <TextField
+                      required
+                      onChange={(e) => setPhone(e.target.value)}
+                      type='tel'
+                      sx={{ width: "300px" }}
+                      id='standard-basic'
+                      label='Phone Number'
+                      variant='standard'
+                    />{" "}
+                    <br />
+                    <TextField
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                      type='password'
+                      sx={{ width: "300px" }}
+                      id='standard-basic'
+                      label='Password'
+                      variant='standard'
+                    />
+                    <TextField
+                      required
+                      onChange={(e) => setRePassword(e.target.value)}
+                      type='password'
+                      sx={{ width: "300px" }}
+                      id='standard-basic'
+                      label='Re - Type Password'
+                      variant='standard'
+                    />
+                    <br />
+                    {passwordError && (
+                      <Alert severity='error'>
+                        This is an error alert — check it out!
+                      </Alert>
+                    )}
+                    <h4>
+                      If you Already have an Account Please <br /> Go to Login!
+                      <Link to='/login'>Here</Link>
+                    </h4>
+                  </CardContent>
+                  <CardActions
+                    sx={{
+                      textAlign: "center",
+                      display: "block",
+                      // marginTop: "20px",
+                    }}>
+                    <Button
+                      onClick={handleLogin}
+                      sx={{ width: "50%" }}
+                      variant='contained'>
+                      Register
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            )}
+            {isLoading && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <CircularProgress />
+              </Box>
+            )}
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
             <Grid>

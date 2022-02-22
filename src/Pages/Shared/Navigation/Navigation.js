@@ -36,6 +36,7 @@ HideOnScroll.propTypes = {
 
 const Navigation = () => {
   const { user, logOut } = useAuth();
+  console.log(user);
 
   console.log(user);
   return (

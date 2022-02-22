@@ -26,13 +26,17 @@ import Appointments from "../Appointments/Appointments";
 import Patients from "../Patients/Patients";
 import Prescriptions from "../Prescripttions/Prescriptions";
 import Setting from "../Setting/Setting";
+import useAuth from "../../../Hooks/useAuth";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const drawerWidth = 240;
 
 const DashBoard = (props) => {
   let { path, url } = useRouteMatch();
+  const history = useHistory();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { logOut } = useAuth();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -142,7 +146,7 @@ const DashBoard = (props) => {
       </List>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button onClick={() => logOut(history)}>
           <ListItemIcon>
             <LogoutIcon sx={{ color: "red" }} />
           </ListItemIcon>
