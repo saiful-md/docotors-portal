@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -6,6 +6,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
+import useAuth from "../../Hooks/useAuth";
 
 const style = {
   position: "absolute",
@@ -20,13 +21,46 @@ const style = {
   p: 4,
 };
 
-const BookingModal = ({ open, setOpen, appointment, date }) => {
-  const { title, time, avalable } = appointment;
+const BookingModal = ({ setSuccess, open, setOpen, appointment, date }) => {
+  const { title, time } = appointment;
+  const { user } = useAuth();
   const handleClose = () => setOpen(false);
+  const intialInfo = {
+    displayName: user.displayName,
+    email: user.email,
+    phoneNumber: "",
+  };
+
+  const [bookingInfo, setBookingInfo] = useState(intialInfo);
+  const handleOnBlur = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    const newInfo = { ...bookingInfo };
+    newInfo[name] = value;
+    setBookingInfo(newInfo);
+  };
 
   const handleBookingModal = (e) => {
-    alert("submitted");
-
+    const appointment = {
+      ...bookingInfo,
+      time,
+      serviceName: title,
+      date: date.toLocaleDateString(),
+    };
+    fetch("http://localhost:5000/appointments", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(appointment),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.insertedId) {
+          setSuccess(true);
+        }
+      });
     handleClose();
     e.preventDefault();
   };
@@ -61,18 +95,24 @@ const BookingModal = ({ open, setOpen, appointment, date }) => {
                 <TextField
                   sx={{ width: "90%", m: 1 }}
                   id='outlined-size-small'
-                  placeholder='Your Name'
+                  name='displayName'
+                  onBlur={handleOnBlur}
+                  defaultValue={user.displayName}
                   size='small'
                 />
                 <TextField
                   sx={{ width: "90%", m: 1 }}
                   id='outlined-size-small'
-                  placeholder='Email'
+                  name='email'
+                  onBlur={handleOnBlur}
+                  defaultValue={user.email}
                   size='small'
                 />
                 <TextField
                   sx={{ width: "90%", m: 1 }}
                   id='outlined-size-small'
+                  name='phoneNumber'
+                  onBlur={handleOnBlur}
                   placeholder='Phone Number'
                   size='small'
                 />

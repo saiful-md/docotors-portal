@@ -15,20 +15,24 @@ import image from "../../../images/login.png";
 import Card from "@mui/material/Card";
 import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Register = () => {
-  const { registerUser, isLoading } = useAuth();
+  const { registerUser, isLoading, errorr } = useAuth();
   const [name, setName] = useState({});
   const [email, setEmail] = useState({});
-  const [phone, setPhone] = useState({});
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState({});
   const [rePassword, setRePassword] = useState({});
+  const history = useHistory();
+
   const [passwordError, setPasswordErro] = useState(false);
 
   const handleLogin = () => {
     if (password === rePassword) {
       setPasswordErro(false);
-      registerUser(email, password);
+      registerUser(email, password, name, phone, history);
     } else {
       setPasswordErro(true);
     }
@@ -105,11 +109,7 @@ const Register = () => {
                       variant='standard'
                     />
                     <br />
-                    {passwordError && (
-                      <Alert severity='error'>
-                        This is an error alert — check it out!
-                      </Alert>
-                    )}
+                    {passwordError && <Alert severity='error'>{errorr}</Alert>}
                     <h4>
                       If you Already have an Account Please <br /> Go to Login!
                       <Link to='/login'>Here</Link>

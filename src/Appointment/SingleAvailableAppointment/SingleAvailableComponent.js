@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 import BookingModal from "../BookingModa/BookingModal";
 
-const SingleAvailableComponent = ({ appointment, date }) => {
+const SingleAvailableComponent = ({ setSuccess, appointment, date }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const { title, time, avalable } = appointment;
@@ -44,6 +44,7 @@ const SingleAvailableComponent = ({ appointment, date }) => {
           appointment={appointment}
           open={open}
           setOpen={setOpen}
+          setSuccess={setSuccess}
           date={date}></BookingModal>
       )}
     </>

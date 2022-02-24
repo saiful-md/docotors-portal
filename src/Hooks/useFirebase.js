@@ -5,9 +5,11 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 initailaizeAuthenticaiton();
 const useFirebase = () => {
@@ -15,16 +17,44 @@ const useFirebase = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorr, setErrorr] = useState("");
   const [success, setSuccess] = useState(false);
+  const [addmin, setAddmin] = useState({});
   const auth = getAuth();
-  const history = useHistory();
+
+  // google  sign in pop up
+  const googleProvider = new GoogleAuthProvider();
+  const googleSighIn = (location, history) => {
+    // setIsLoading(true);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const user = result.user;
+        saveUser(user.email, user.displayName, "PUT");
+        history.push(location?.state?.from || "/");
+        setErrorr("");
+      })
+      .catch((error) => {
+        setErrorr(error.errorMessage);
+      });
+    // .finally(() => setIsLoading(false));
+  };
 
   // Register
-  const registerUser = (email, password) => {
+  const registerUser = (email, password, name, phone, history) => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        setUser(user);
+        const newUser = { email, displayName: name, phoneNumber: phone };
+        setUser(newUser);
+        // sve user to database
+        saveUser(email, name, "POST");
+        //send to firebase
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          phoneNumber: parseInt(phone),
+        })
+          .then(() => {})
+          .catch((error) => {});
+        history.replace("/");
+        setErrorr("");
       })
       .catch((error) => {
         // const errorCode = error.code;
@@ -64,7 +94,24 @@ const useFirebase = () => {
       setSuccess(false);
     });
     return () => unsubscribe;
-  }, []);
+  }, [auth]);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setAddmin(data));
+  }, [user.email]);
+
+  const saveUser = (email, name, method) => {
+    const userDetail = { email, name };
+    fetch("http://localhost:5000/users", {
+      method: method,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(userDetail),
+    }).then();
+  };
 
   //log-out
   const logOut = (history) => {
@@ -87,6 +134,8 @@ const useFirebase = () => {
     isLoading,
     errorr,
     success,
+    addmin,
+    googleSighIn,
     logOut,
     login,
   };

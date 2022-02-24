@@ -22,7 +22,7 @@ const Login = () => {
   let location = useLocation();
   let history = useHistory();
 
-  const { isLoading, login, errorr, success } = useAuth();
+  const { isLoading, login, errorr, success, googleSighIn } = useAuth();
   console.log(isLoading, errorr, success);
   const handleLogin = () => {
     login(email, password, location, history);
@@ -91,9 +91,17 @@ const Login = () => {
                       variant='contained'>
                       Sign In
                     </Button>
+                    <p>-----------------</p>
+                    <Button
+                      onClick={() => googleSighIn(location, history)}
+                      sx={{ width: "80%" }}
+                      variant='contained'>
+                      google sign in
+                    </Button>
                   </CardActions>
                 </Card>
               )}
+
               {isLoading && (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <CircularProgress />

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useAuth from "../../../Hooks/useAuth";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,20 +12,31 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+// import MenuItem from "@mui/material/MenuItem";
+// import FormControl from "@mui/material/FormControl";
+// import Select from "@mui/material/Select";
 
 import { StaticDatePicker } from "@mui/lab";
 
 const Appointments = () => {
+  const { user } = useAuth();
   const [value, setValue] = React.useState(new Date());
-  const [age, setAge] = React.useState("");
+  // const [age, setAge] = React.useState("");
+  const [appointments, setAppointments] = useState([]);
+  const localDate = value.toLocaleDateString();
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-    console.log(event.target.value);
-  };
+  useEffect(() => {
+    fetch(
+      `http://localhost:5000/appointments?email=${user.email}&date=${localDate}`
+    )
+      .then((res) => res.json())
+      .then((data) => setAppointments(data));
+  }, [user.email, localDate]);
+
+  // const handleChange = (event) => {
+  //   setAge(event.target.value);
+  //   console.log(event.target.value);
+  // };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -37,13 +49,11 @@ const Appointments = () => {
           item
           xs={12}
           sm={6}
-          md={6}>
+          md={5}>
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
-              boxShadow: 2,
-              borderRadius: 1,
+              justifyContent: "left",
             }}>
             <LocalizationProvider
               sx={{ width: "50%" }}
@@ -70,7 +80,7 @@ const Appointments = () => {
           item
           xs={12}
           sm={6}
-          md={6}>
+          md={7}>
           <Box
             sx={{
               // boxShadow: 2,
@@ -93,36 +103,42 @@ const Appointments = () => {
                     {/* <TableCell align='right'>Protein&nbsp;(g)</TableCell> */}
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    {/* <TableCell component='th' scope='row'>
+                {appointments.map((appointment) => (
+                  <TableBody key={appointment._id}>
+                    <TableRow
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}>
+                      {/* <TableCell component='th' scope='row'>
                       name
                     </TableCell> */}
-                    <TableCell align='left'>Saiful Islam</TableCell>
-                    <TableCell align='left'>8.00</TableCell>
-                    <TableCell align='left'>
-                      <Box>
-                        <FormControl fullWidth sx={{ Width: "50px" }}>
-                          <Select
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select'
-                            value={age}
-                            sx={{
-                              background: `${
-                                age === 10 ? " cyan" : "rgba(0,0,0,0.5)"
-                              }`,
-                            }}
-                            onChange={handleChange}>
-                            <MenuItem value={10}>Visited</MenuItem>
-                            <MenuItem value={20}>Not Visited</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </TableCell>
-                    {/* <TableCell align='right'>name</TableCell> */}
-                  </TableRow>
-                </TableBody>
+                      <TableCell align='left'>
+                        {appointment.displayName}
+                      </TableCell>
+                      <TableCell align='left'>{appointment.time}</TableCell>
+                      <TableCell align='left'>
+                        {/* <Box>
+                          <FormControl fullWidth sx={{ Width: "50px" }}>
+                            <Select
+                              labelId='demo-simple-select-label'
+                              id='demo-simple-select'
+                              value={age}
+                              sx={{
+                                background: `${
+                                  age === 10 ? " cyan" : "rgba(0,0,0,0.5)"
+                                }`,
+                              }}
+                              onChange={handleChange}>
+                              <MenuItem value={10}>Visited</MenuItem>
+                              <MenuItem value={20}>Not Visited</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box> */}
+                      </TableCell>
+                      {/* <TableCell align='right'>name</TableCell> */}
+                    </TableRow>
+                  </TableBody>
+                ))}
               </Table>
             </TableContainer>
           </Box>
